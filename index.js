@@ -1,4 +1,3 @@
-
 var express = require('express')
 var bodyParser = require('body-parser')
 var request = require('request')
@@ -28,4 +27,4 @@ app.get('/webhook/', function (req, res) {
 // Spin up the server
 app.listen(app.get('port'), function() {
     console.log('running on port', app.get('port'))
-}))
+})
