@@ -40,9 +40,6 @@ app.post('/webhook/', function (req, res) {
                 sendGenericMessage(sender)
                 continue
             }
-         else if(text=='How are you'){
-         sendTextMessage(sender,"I am great, how are you?")
-         }
             sendTextMessage(sender, “Neha says“ + text.substring(0, 200))
         }
         if (event.postback) {
