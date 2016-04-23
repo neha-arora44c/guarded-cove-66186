@@ -13,64 +13,65 @@ app.use(bodyParser.json())
 
 // Index route
 app.get('/', function (req, res) {
-    res.send('Hello world, I am a chat bot')
-})
+        res.send('Hello world, I am a chat bot')
+        })
 
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
-    if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
+        if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
         res.send(req.query['hub.challenge'])
-    }
-    res.send('Error, wrong token')
-})
+        }
+        res.send('Error, wrong token')
+        })
 
 // Spin up the server
 app.listen(app.get('port'), function() {
-    console.log('running on port', app.get('port'))
-})
+           console.log('running on port', app.get('port'))
+           })
 
 app.post('/webhook/', function (req, res) {
-    messaging_events = req.body.entry[0].messaging
-    for (i = 0; i < messaging_events.length; i++) {
-        event = req.body.entry[0].messaging[i]
-        sender = event.sender.id
-        if (event.message && event.message.text) {
-            text = event.message.text
-            if (text === 'Generic') {
-                sendGenericMessage(sender)
-                continue
-            }
-            sendTextMessage(sender, “Neha says“ + text.substring(0, 200))
-        }
-        if (event.postback) {
-            text = JSON.stringify(event.postback)
-            sendTextMessage(sender, "Postback received: "+text.substring(0, 200), token)
-            continue
-        }
-    }
-    res.sendStatus(200)
-})
+         messaging_events = req.body.entry[0].messaging
+         for (i = 0; i < messaging_events.length; i++) {
+         event = req.body.entry[0].messaging[i]
+         sender = event.sender.id
+         if (event.message && event.message.text) {
+         text = event.message.text
+         if (text === 'Generic') {
+         sendGenericMessage(sender)
+         continue
+         }
+         sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+         }
+         if (event.postback) {
+         text = JSON.stringify(event.postback)
+         sendTextMessage(sender, "Postback received: "+text.substring(0, 200), token)
+         continue
+         }
+         }
+         res.sendStatus(200)
+         })
+
 var token = "CAAWwHGmQ1ocBAAyEwGNfj6BOCvwv94NZAqZBKmVkVJ19yzNn0xWMZChUaA7BrD8hZAzFg1ntIvNHeegYmCm1yTXOXpWXtBYFF2WUY3NoX7rEnpGEqBOH0p68QMYAI7H7xPvAI0AQYE3FrgGHkhcDN3sO20ArhyxjyJgUcnzr31gYV24Ow9smUZAtuny3LaZBYZD"
 
 function sendTextMessage(sender, text) {
     messageData = {
-        text:text
+    text:text
     }
     request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:token},
-        method: 'POST',
-        json: {
+            url: 'https://graph.facebook.com/v2.6/me/messages',
+            qs: {access_token:token},
+            method: 'POST',
+            json: {
             recipient: {id:sender},
             message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
+            }
+            }, function(error, response, body) {
+            if (error) {
             console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
+            } else if (response.body.error) {
             console.log('Error: ', response.body.error)
-        }
-    })
+            }
+            })
 }
 
 function sendGenericMessage(sender) {
@@ -80,44 +81,44 @@ function sendGenericMessage(sender) {
             "payload": {
                 "template_type": "generic",
                 "elements": [{
-                    "title": "First card",
-                    "subtitle": "Element #1 of an hscroll",
-                    "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
-                    "buttons": [{
-                        "type": "web_url",
-                        "url": "https://www.messenger.com",
-                        "title": "web url"
-                    }, {
-                        "type": "postback",
-                        "title": "Postback",
-                        "payload": "Payload for first element in a generic bubble",
-                    }],
-                }, {
-                    "title": "Second card",
-                    "subtitle": "Element #2 of an hscroll",
-                    "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
-                    "buttons": [{
-                        "type": "postback",
-                        "title": "Postback",
-                        "payload": "Payload for second element in a generic bubble",
-                    }],
-                }]
+                             "title": "First card",
+                             "subtitle": "Element #1 of an hscroll",
+                             "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
+                             "buttons": [{
+                                         "type": "web_url",
+                                         "url": "https://www.messenger.com",
+                                         "title": "web url"
+                                         }, {
+                                         "type": "postback",
+                                         "title": "Postback",
+                                         "payload": "Payload for first element in a generic bubble",
+                                         }],
+                             }, {
+                             "title": "Second card",
+                             "subtitle": "Element #2 of an hscroll",
+                             "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
+                             "buttons": [{
+                                         "type": "postback",
+                                         "title": "Postback",
+                                         "payload": "Payload for second element in a generic bubble",
+                                         }],
+                             }]
             }
         }
     }
     request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:token},
-        method: 'POST',
-        json: {
+            url: 'https://graph.facebook.com/v2.6/me/messages',
+            qs: {access_token:token},
+            method: 'POST',
+            json: {
             recipient: {id:sender},
             message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
+            }
+            }, function(error, response, body) {
+            if (error) {
             console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
+            } else if (response.body.error) {
             console.log('Error: ', response.body.error)
-        }
-    })
+            }
+            })
 }
